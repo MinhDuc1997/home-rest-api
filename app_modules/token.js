@@ -27,12 +27,12 @@ class Token{
 				if(j === snap.numChildren()){
 					if (pass ===1  ) {
 						res.json({
-			 				status: 'true',
+			 				status: true,
 			 				id_user: id_user
 					 	}) 
 					}else{
 						res.json({
-			 				status: 'false'
+			 				status: false
 					 	}) 
 					}
 					res.end()
