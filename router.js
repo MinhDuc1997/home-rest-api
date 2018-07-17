@@ -16,7 +16,7 @@ const token = require('./app_modules/token')
 app.get('/', function(req, res){
 	res.send('<pre>wellcome</pre>')
 	res.end
-}) 
+})
 
 app.get('/api/v1/login/:username/:password', function(req, res){
 	var lg = new login()
