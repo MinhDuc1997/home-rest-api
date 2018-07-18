@@ -3,11 +3,11 @@ class Myhome{
 	myhome(req, res, firebaseapp, http){
 		var token = req.params.token
 		var device = req.params.device
-		var uri = 'http://localhost:3500/api/v1/token/'+token
+		var uri = process.env.DOMAIN+'/api/v1/token/'+token
 		var i = 0
 		http.get(uri, resp =>{
 			let data = ''
-
+			
 			resp.on('data', chunk=>{
 				data += chunk
 			})
