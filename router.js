@@ -41,13 +41,47 @@ app.get('/api/v1/remote/:device/:id/:onoff/:token', (req, res) =>{
 	var id = req.params.id
 	var onoff = req.params.onoff
 	var token = req.params.token
-	res.json({
-		status: true,
-		device: device,
-		changed: {
-			id: id,
-			value: onoff
-		}
+	var uri = 'http://localhost:3500/api/v1/token/'+token
+	var ref = firebaseapp.database().ref('home/users')
+	var i = -1
+	http.get(uri, resp=>{
+		let data = ''
+			
+			resp.on('data', chunk =>{
+				data += chunk
+			})
+
+			resp.on('end', ()=>{
+				json = JSON.parse(data)
+				ref.once('value', snap =>{
+					snap.forEach(child =>{
+						if(child.val().id_user === json.id_user){
+							child.val().light.forEach(childd =>{
+								i++
+								if(childd.id_light == id){
+									console.log(child.val())
+									//change here
+									ref = firebaseapp.database().ref('home/users/'+child.key+'/light/'+i)
+									ref.update({
+										id_light: id,
+										value: onoff
+									})
+									res.json({
+										status: true,
+										device: device,
+										changed: {
+											id: id,
+											value: onoff
+										}
+									})
+									res.end()
+									console.log('home/users/'+child.key+'/light/'+i)
+								}
+							})
+						}
+					})
+				})
+
+			})
 	})
-	res.end()
 })

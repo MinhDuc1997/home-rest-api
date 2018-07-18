@@ -22,7 +22,7 @@ class Myhome{
 					//find id_user of token in "users"
 					ref.once('value', snap =>{
 						snap.forEach(child =>{
-							if(child.val().id_user == json.id_user){
+							if(child.val().id_user === json.id_user){
 								switch(device){
 									case 'light':{
 										ref = firebaseapp.database().ref('home/users/'+child.key+'/light')
@@ -82,7 +82,7 @@ class Myhome{
 			})
 		})
 	}
-	
+
 }
 
 module.exports = Myhome
