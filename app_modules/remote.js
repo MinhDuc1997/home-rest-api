@@ -7,7 +7,21 @@ class Remote{
 		var token = req.params.token
 		var uri = process.env.DOMAIN+'/api/v1/token/'+token
 		var ref = firebaseapp.database().ref('home/users')
+		var pass = 0
 		var i = -1
+		var j = 0
+
+		//check input
+		if(id != parseInt(id) || onoff != parseInt(onoff) || onoff<0 || onoff >1 || onoff.toString().length >1){
+			res.json({
+				status: false,
+				error: 'error input value'						
+			})
+			res.end()
+			return
+		}
+
+		//change process
 		http.get(uri, resp=>{
 			let data = ''
 				
@@ -25,6 +39,7 @@ class Remote{
 									case 'light':{
 										child.val().light.forEach(childd =>{
 											i++
+											j++
 											if(childd.id_light == id){
 												//change here
 												ref = firebaseapp.database().ref('home/users/'+child.key+'/light/'+i)
@@ -42,6 +57,16 @@ class Remote{
 													}
 												})
 												res.end()
+												pass = 1
+											}
+											if(j == child.numChildren()){
+												if(pass === 0){
+													res.json({
+														status: false,
+														error: 'unknown id'						
+													})
+													res.end()
+												}
 											}
 										})
 										break
@@ -51,7 +76,6 @@ class Remote{
 											status: false,
 											device: 'unknown',
 											token: true,
-											changed: ''
 										})
 										res.end()
 									}
@@ -84,6 +108,7 @@ class Remote{
 			})
 		})
 	}
+
 }
 
 module.exports = Remote
