@@ -48,32 +48,31 @@ class Remote{
 													value: onoff
 												}, err =>{
 													if(!err){
-														res.json({
-															status: true,
-															device: device,
-															token: true,
-															changed: {
-																id: id,
-																value: onoff
-															}
-														})
-														res.end()
-														pass = 1
-														if(j == child.numChildren()){
-															if(pass == 0){
-																res.json({
-																	status: false,
-																	error: 'unknown id'						
-																})
-																res.end()
-															}
-														}
+														
 													}
 
 												})
-												
+												res.json({
+													status: true,
+													device: device,
+													token: true,
+													changed: {
+														id: id,
+														value: onoff
+													}
+												})
+												res.end()
+												pass = 1												
 											}
-											
+											if(j == child.numChildren()){
+												if(pass == 0){
+													res.json({
+														status: false,
+														error: 'unknown id'						
+													})
+													res.end()
+												}
+											}
 										})
 										break
 									}
