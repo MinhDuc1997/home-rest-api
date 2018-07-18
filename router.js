@@ -53,34 +53,71 @@ app.get('/api/v1/remote/:device/:id/:onoff/:token', (req, res) =>{
 
 			resp.on('end', ()=>{
 				json = JSON.parse(data)
-				ref.once('value', snap =>{
-					snap.forEach(child =>{
-						if(child.val().id_user === json.id_user){
-							child.val().light.forEach(childd =>{
-								i++
-								if(childd.id_light == id){
-									console.log(child.val())
-									//change here
-									ref = firebaseapp.database().ref('home/users/'+child.key+'/light/'+i)
-									ref.update({
-										id_light: id,
-										value: onoff
-									})
-									res.json({
-										status: true,
-										device: device,
-										changed: {
-											id: id,
-											value: onoff
-										}
-									})
-									res.end()
-									console.log('home/users/'+child.key+'/light/'+i)
+				if(json.status === true){
+					ref.once('value', snap =>{
+						snap.forEach(child =>{
+							if(child.val().id_user === json.id_user){
+								switch(device){
+									case 'light':{
+										child.val().light.forEach(childd =>{
+											i++
+											if(childd.id_light == id){
+												//change here
+												ref = firebaseapp.database().ref('home/users/'+child.key+'/light/'+i)
+												ref.update({
+													id_light: id,
+													value: onoff
+												})
+												res.json({
+													status: true,
+													device: device,
+													token: true,
+													changed: {
+														id: id,
+														value: onoff
+													}
+												})
+												res.end()
+											}
+										})
+										break
+									}
+									default:{
+										res.json({
+											status: false,
+											device: 'unknown',
+											token: true,
+											changed: ''
+										})
+										res.end()
+									}
 								}
-							})
-						}
+							}
+						})
 					})
-				})
+				}else{
+					switch(device){
+						case 'light':{
+							res.json({
+								status: false,
+								device: device,
+								token: false
+							})
+							res.end()
+							break
+						}
+						default:{
+							res.json({
+								status: false,
+								device: 'unknown',
+								token: false
+							})
+							res.end()
+							break
+						}
+
+					}
+				}
 
 			})
 	})
