@@ -31,10 +31,10 @@ class Remote{
 
 			resp.on('end', ()=>{
 				var json = JSON.parse(data)
-				if(json.status === true){
+				if(json.status == true){
 					ref.once('value', snap =>{
 						snap.forEach(child =>{
-							if(child.val().id_user === json.id_user){
+							if(child.val().id_user == json.id_user){
 								switch(device){
 									case 'light':{
 										child.val().light.forEach(childd =>{
@@ -46,28 +46,34 @@ class Remote{
 												ref.update({
 													id_light: id,
 													value: onoff
-												})
-												res.json({
-													status: true,
-													device: device,
-													token: true,
-													changed: {
-														id: id,
-														value: onoff
+												}, err =>{
+													if(!err){
+														res.json({
+															status: true,
+															device: device,
+															token: true,
+															changed: {
+																id: id,
+																value: onoff
+															}
+														})
+														res.end()
+														pass = 1
+														if(j == child.numChildren()){
+															if(pass == 0){
+																res.json({
+																	status: false,
+																	error: 'unknown id'						
+																})
+																res.end()
+															}
+														}
 													}
+
 												})
-												res.end()
-												pass = 1
+												
 											}
-											if(j == child.numChildren()){
-												if(pass === 0){
-													res.json({
-														status: false,
-														error: 'unknown id'						
-													})
-													res.end()
-												}
-											}
+											
 										})
 										break
 									}

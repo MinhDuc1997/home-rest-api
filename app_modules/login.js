@@ -11,13 +11,13 @@ class Login{
 		ref.once('value', snap =>{
 			j++
 			snap.forEach(child =>{
-				if(child.val().password === password && child.val().username === username){
+				if(child.val().password == password && child.val().username == username){
 					pass = 1
 					id_user = child.val().id_user
 					email = child.val().email
 				}
-				if(j === snap.numChildren()){
-					if(pass === 1){
+				if(j == snap.numChildren()){
+					if(pass == 1){
 							console.log('pass')
 							var new_token = '';
 		  					var limit = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -29,27 +29,31 @@ class Login{
 							new_date = new_date.toString()
 							new_date = new Date(new_date)
 							new_date = new_date.getFullYear()+'/'+(new_date.getMonth()+1)+'/'+new_date.getDate()
-							console.log(new_date)
-							res.json({
-								status_login: true,
-								user_info:{
-									username: username,
-									email: email,
-									token: new_token
-								}
-							})
+							
 							var refdb = firebaseapp.database().ref('token')
 							refdb.push({
 								expried: new_date,
 								id_user: id_user,
 								value: new_token
+							}, err =>{
+								if(!err){
+									res.json({
+										status_login: true,
+										user_info:{
+											username: username,
+											email: email,
+											token: new_token
+										}
+									})	
+									res.end()
+								}
 							})
 						}else{
 							res.json({
 								status_login: false,
 							})
+							res.end()
 						}
-						res.end()
 					}
 				j++
 			})

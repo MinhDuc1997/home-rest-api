@@ -16,13 +16,13 @@ class Myhome{
 				var json = JSON.parse(data)
 				var array = []
 				// check status token
-				if(json.status === true){
+				if(json.status == true){
 					var ref = firebaseapp.database().ref('home/users/')
 
 					//find id_user of token in "users"
 					ref.once('value', snap =>{
 						snap.forEach(child =>{
-							if(child.val().id_user === json.id_user){
+							if(child.val().id_user == json.id_user){
 								switch(device){
 									case 'light':{
 										ref = firebaseapp.database().ref('home/users/'+child.key+'/light')
@@ -30,8 +30,7 @@ class Myhome{
 											snapp.forEach(childd =>{
 												i++
 												array.push(childd.val())
-												if(i === snap.numChildren()){
-													console.log(array)
+												if(i == snap.numChildren()){
 													res.json({
 														device: device,
 														status: true,

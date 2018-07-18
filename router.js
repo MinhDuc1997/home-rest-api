@@ -22,6 +22,16 @@ app.get('/', function(req, res){
 	res.end()
 })
 
+app.get('/api', function(req, res){
+	res.send('<pre></pre>')
+	res.end()
+})
+
+app.get('/api/v1', function(req, res){
+	res.send('<pre>V1.0</pre>')
+	res.end()
+})
+
 app.get('/api/v1/login/:username/:password', (req, res) =>{
 	var lg = new login()
 	lg.login(req, res, firebaseapp)		

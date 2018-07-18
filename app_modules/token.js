@@ -10,7 +10,7 @@ class Token{
 		ref.once('value', snap =>{
 			snap.forEach(child => {
 				j++
-				if(child.val().value === token){
+				if(child.val().value == token){
 					var date1 = new Date(child.val().expried).getTime()
 				 	var date2 = new Date(dateNow.getFullYear()+'/'+(dateNow.getMonth()+1)+'/'+dateNow.getDate()).getTime()
 					var timeDiff = date1 - date2
@@ -24,8 +24,8 @@ class Token{
 						} 
 					}
 				}
-				if(j === snap.numChildren()){
-					if (pass ===1  ) {
+				if(j == snap.numChildren()){
+					if (pass ==1  ) {
 						res.json({
 			 				status: true,
 			 				id_user: id_user
