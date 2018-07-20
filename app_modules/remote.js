@@ -57,7 +57,7 @@ class Remote{
 													device: device,
 													token: true,
 													changed: {
-														id: id,
+														id_light: id,
 														value: onoff
 													}
 												})
